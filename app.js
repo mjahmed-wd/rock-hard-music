@@ -18,6 +18,7 @@ const searchSongs = async() => {
 }
 
 const checkError = () => {
+    displaySpinner()
     const message = document.getElementById('notification')
     message.innerText = "Sorry, we are unable to find that."
 }
