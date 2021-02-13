@@ -1,6 +1,7 @@
 const searchSongs = async() => {
     const searchText = document.getElementById('search-field').value;
     const url = `https://api.lyrics.ovh/suggest/${searchText}`
+    displaySpinner()
         //load data
     try {
         const response = await fetch(url)
@@ -10,8 +11,6 @@ const searchSongs = async() => {
         } else {
             displaySongs(data.data)
         }
-        // console.log(typeof data.total)
-        // displaySongs(data.data)
 
     } catch (error) {
         checkError()
@@ -24,10 +23,10 @@ const checkError = () => {
 }
 
 const displaySongs = songs => {
+    displaySpinner()
     const songContainer = document.getElementById('song-container')
     songContainer.innerHTML = '';
     songs.forEach(song => {
-        // console.log(song)
         const songDiv = document.createElement('div');
         songDiv.className = 'single-result row align-items-center my-3 p-3'
         songDiv.innerHTML = `
@@ -49,6 +48,7 @@ const displaySongs = songs => {
 
 const getLyric = async(artist, title) => {
     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
+    displaySpinner()
     try {
         const response = await fetch(url)
         const data = await response.json()
@@ -64,6 +64,18 @@ const getLyric = async(artist, title) => {
 }
 
 const displayLyrics = lyrics => {
+    displaySpinner()
     const lyricsDiv = document.getElementById('song-lyrics')
     lyricsDiv.innerText = lyrics;
 }
+const displaySpinner = () => {
+    const spinner = document.getElementById('loading-spinner')
+    spinner.classList.toggle('d-none')
+}
+
+document.getElementById("search-field").addEventListener("keydown", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        searchSongs()
+    }
+});
